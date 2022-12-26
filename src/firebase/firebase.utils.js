@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
@@ -13,7 +13,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const firestore = getFirestore(app);
+const db = getFirestore(app);
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
@@ -21,28 +21,39 @@ provider.setCustomParameters({
   'prompt': 'select_account'
 });
 
-const signInWithGoogle = () => signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  });
+const signInWithGoogle = () => signInWithPopup(auth, provider);
 
-  export {
-    firestore,
-    signInWithGoogle,
-    auth
-  };
-  export default app;
+const createUserProfileDocument = async (userAuth, ...additionalData) => {
+  if (!userAuth) return;
+
+  const docRef = doc(db, "users", userAuth.uid);
+  const docSnap = await getDoc(docRef);
+   
+  if (!docSnap.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+    try {
+      await setDoc(doc(db, "users", userAuth.uid), {
+        displayName,
+        email,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log("Error creating user >>: ", error.message);
+    }
+    
+  }
+
+  return docRef;
+};
+
+export {
+  db as firestore,
+  signInWithGoogle,
+  auth,
+  createUserProfileDocument,
+  onSnapshot
+};
+export default app;
