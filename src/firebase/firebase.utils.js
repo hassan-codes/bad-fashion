@@ -1,6 +1,19 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  onSnapshot 
+} from 'firebase/firestore';
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  createUserWithEmailAndPassword, 
+  updateProfile, 
+  signInWithEmailAndPassword
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDAF5gxyfpiDM3RIeI2k59ZokJvwJ14NOA",
@@ -49,17 +62,6 @@ const createUserProfileDocument = async (userAuth, ...additionalData) => {
   return docRef;
 };
 
-const registerWithEmailAndPassword = async (userAuth, ...additionalData) => {
-  try {
-    const { email, password } = userAuth;
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-    // createUserProfileDocument(user, {displayName})
-    console.log({user});
-  } catch (error) {
-    console.error(`${error.code}>> ${error.message}`);
-  }
-}
-
 export {
   db as firestore,
   signInWithGoogle,
@@ -67,6 +69,7 @@ export {
   createUserProfileDocument,
   onSnapshot,
   createUserWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  signInWithEmailAndPassword
 };
 export default app;
