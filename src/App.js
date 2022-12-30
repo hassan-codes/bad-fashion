@@ -26,6 +26,8 @@ class App extends React.Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
+        alert(`Welcome to Bad Fasion, ${userAuth.displayName}`);
+
         const userRef = await createUserProfileDocument(userAuth);
 
         this.unsubscribeFromSnapShot = onSnapshot(userRef, (doc) => {
