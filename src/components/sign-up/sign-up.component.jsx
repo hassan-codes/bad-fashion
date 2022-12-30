@@ -4,7 +4,12 @@ import './sign-up.styles.scss';
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import { auth, createUserWithEmailAndPassword, createUserProfileDocument, updateProfile } from "../../firebase/firebase.utils";
+import { 
+  auth, 
+  createUserWithEmailAndPassword, 
+  createUserProfileDocument, 
+  updateProfile 
+} from "../../firebase/firebase.utils";
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -87,7 +92,7 @@ class SignUp extends React.Component {
             value={password}
             onChange={this.handleChange}
             label="Password"
-            minlength="8"
+            minLength="8"
             required
           />
           <FormInput
@@ -96,7 +101,7 @@ class SignUp extends React.Component {
             value={confirmPassword}
             onChange={this.handleChange}
             label="Confirm Password"
-            minlength="8"
+            minLength="8"
             required
           />
           <CustomButton type="submit">SIGN UP</CustomButton>
