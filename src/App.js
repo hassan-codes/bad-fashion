@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.css";
@@ -26,8 +31,6 @@ class App extends React.Component {
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
-        alert(`Welcome to Bad Fasion, ${userAuth.displayName}`);
-
         const userRef = await createUserProfileDocument(userAuth);
 
         this.unsubscribeFromSnapShot = onSnapshot(userRef, (doc) => {
@@ -54,15 +57,28 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
-          <Route path="/auth" element={<AuthPage />} />
+          <Route
+            path="/auth"
+            element={
+              this.props.currentUser ? (
+                <Navigate to="/" replace={true} />
+              ) : (
+                <AuthPage />
+              )
+            }
+          />
         </Routes>
       </Router>
     );
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser,
+});
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
