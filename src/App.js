@@ -13,6 +13,7 @@ import Header from "./components/header/header.component";
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import AuthPage from "./pages/auth/auth.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 
 import {
   auth,
@@ -69,6 +70,7 @@ class App extends React.Component {
               )
             }
           />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Routes>
       </Router>
     );
