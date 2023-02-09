@@ -1,14 +1,14 @@
 import React from "react";
 
-import './sign-up.styles.scss';
+import "./sign-up.styles.scss";
 
 import FormInput from "../form-input/form-input.component";
 import CustomButton from "../custom-button/custom-button.component";
-import { 
-  auth, 
-  createUserWithEmailAndPassword, 
-  createUserProfileDocument, 
-  updateProfile 
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  createUserProfileDocument,
+  updateProfile,
 } from "../../firebase/firebase.utils";
 
 class SignUp extends React.Component {
@@ -16,14 +16,14 @@ class SignUp extends React.Component {
     super(props);
 
     this.state = {
-      displayName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      displayName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     };
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const { displayName, email, password, confirmPassword } = this.state;
@@ -34,34 +34,34 @@ class SignUp extends React.Component {
     }
 
     try {
-      const currentUser = await createUserWithEmailAndPassword(auth, email, password);
+      const currentUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       updateProfile(auth.currentUser, {
-        displayName: displayName
-      }).then( () => {
-          createUserProfileDocument(currentUser.user);
-        }
-      );
-      
-      this.setState(
-        {
-          displayName: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-        }
-      );
+        displayName: displayName,
+      }).then(() => {
+        createUserProfileDocument(currentUser.user);
+      });
+
+      this.setState({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
 
       alert("Sign up successful! Click 'SHOP' to browse our catalogue");
     } catch (error) {
       console.error(`${error.code}: ${error.message}`);
     }
+  };
 
-  }
-
-  handleChange = event => {
+  handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
+  };
 
   render() {
     const { displayName, email, password, confirmPassword } = this.state;
@@ -69,7 +69,7 @@ class SignUp extends React.Component {
       <div className="sign-up">
         <h2 className="title">I do not have an account</h2>
         <span>Sign up with your email</span>
-        <form className="sign-up-form" onSubmit={ this.handleSubmit }>
+        <form className="sign-up-form" onSubmit={this.handleSubmit}>
           <FormInput
             name="displayName"
             type="text"
